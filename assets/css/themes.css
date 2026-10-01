@@ -1,0 +1,107 @@
+/* ============================================================
+   SPEC9 Flooring — Theme Tokens (Light & Dark)
+   ------------------------------------------------------------
+   ALL colour tokens live here. Edit this file to re-skin the
+   whole site. When moving to WordPress/ACF these map directly
+   onto theme.json palette colours.
+
+   Three states are supported:
+     1. Light (default)    -> :root
+     2. Dark  (explicit)   -> html[data-theme="dark"]
+     3. Auto  (follows OS) -> @media (prefers-color-scheme: dark)
+                                   (only when the visitor has not
+                                   chosen a theme themselves)
+
+   Token reference:
+     --bg    page background          --mute secondary text
+     --warm  warm section background  --line borders & dividers
+     --ink   primary text             --red  brand accent
+     --dk    dark surface (footer)    --dkt  text on dark surface
+   ============================================================ */
+
+
+/* --- 1. LIGHT (default) ----------------------------------- */
+:root {
+    color-scheme: light;
+
+    --bg: #ffffff;      /* page background             */
+    --warm: #f5f3ef;    /* warm section background     */
+    --ink: #1f2124;     /* primary text                */
+    --mute: #6f6c67;    /* secondary / muted text      */
+    --line: #dedad3;    /* borders & hairline dividers */
+    --red: #ed2118;     /* brand accent                */
+    --dk: #1b1c1f;      /* dark surface (footer/stats) */
+    --dkt: #f2f0ec      /* text on dark surface        */
+}
+
+
+/* --- 2. DARK (explicit choice) -----------------------------
+   Applied when the JS toggle sets data-theme="dark" on <html>.
+   ---------------------------------------------------------- */
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    --bg: #141517;
+    --warm: #1b1c1f;
+    --ink: #efece7;
+    --mute: #9b978f;
+    --line: #33353a;
+    --red: #ed2118;
+    --dk: #0c0c0d;
+    --dkt: #f2f0ec
+}
+
+
+/* --- 3. AUTO DARK (follows the operating system) -----------
+   Only in effect when the visitor has NOT picked a theme
+   (i.e. no data-theme attribute set by the toggle).
+   ---------------------------------------------------------- */
+@media(prefers-color-scheme:dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        --bg: #141517;
+        --warm: #1b1c1f;
+        --ink: #efece7;
+        --mute: #9b978f;
+        --line: #33353a;
+        --red: #ed2118;
+        --dk: #0c0c0d;
+        --dkt: #f2f0ec
+    }
+
+    /* Auto-dark header logo swap (only when the OS is dark and no
+       explicit theme has been chosen). */
+    :root:not([data-theme="light"]) header img.header-logo-light {
+        display: none
+    }
+
+    :root:not([data-theme="light"]) header img.header-logo-dark {
+        display: block
+    }
+}
+
+
+/* --- 4. THEME-SPECIFIC COMPONENT RULES ----------------------
+   Tiny overrides that depend on the active theme, kept here so
+   styles.css stays theme-agnostic.
+   Base state (from styles.css): moon icon shown -> tap for dark.
+   Dark state below: sun icon shown                   -> tap for light.
+   ---------------------------------------------------------- */
+html[data-theme="dark"] .theme-toggle .icon-sun {
+    display: inline
+}
+
+html[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none
+}
+
+/* Header logo — normal (Spec9_Logo.png) in light mode,
+   white (Spec9_Logo-white.png) in dark mode */
+html[data-theme="dark"] header img.header-logo-light {
+    display: none
+}
+
+html[data-theme="dark"] header img.header-logo-dark {
+    display: block
+}

@@ -1,0 +1,926 @@
+/* ============================================================
+   SPEC9 Flooring — Main Stylesheet
+   ------------------------------------------------------------
+   File        : assets/css/styles.css
+   Theme tokens: assets/css/themes.css   ->  edit ALL colours here
+   Images      : assets/                 ->  swap via <img> tags
+   ------------------------------------------------------------
+   For the WordPress/ACF port every numbered section below maps
+   to a template partial (header, hero, services, projects…),
+   which makes migrating rules into the theme later trivial.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   1. RESET & BASE
+   ------------------------------------------------------------ */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px))
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0
+}
+
+/* :root also carries the safe-area paddings alongside the
+   theme tokens defined in themes.css */
+:root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px)
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 17px/1.6 Barlow, system-ui, sans-serif
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Barlow Condensed', Impact, sans-serif;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.005em
+}
+
+h2 {
+    font-size: clamp(38px, 5vw, 60px);
+    max-width: 14em
+}
+
+a {
+    color: inherit;
+    text-decoration: none
+}
+
+:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 3px
+}
+
+
+/* ------------------------------------------------------------
+   2. LAYOUT UTILITIES
+   .w = page container | .sec = section spacing
+   .warm = warm content band | .lab = section eyebrow
+   .lead = intro paragraph
+   ------------------------------------------------------------ */
+/* .w {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px
+} */
+
+.w {
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* ≥ 576px */
+@media (min-width: 576px) {
+    .w {
+        max-width: 540px;
+    }
+}
+
+/* ≥ 768px */
+@media (min-width: 768px) {
+    .w {
+        max-width: 720px;
+    }
+}
+
+/* ≥ 992px */
+@media (min-width: 992px) {
+    .w {
+        max-width: 960px;
+    }
+}
+
+/* ≥ 1200px */
+@media (min-width: 1200px) {
+    .w {
+        max-width: 1140px;
+    }
+}
+
+/* ≥ 1400px */
+@media (min-width: 1400px) {
+    .w {
+        max-width: 1240px;
+    }
+}
+
+.sec {
+    padding: 112px 0
+}
+
+.warm {
+    background: var(--warm)
+}
+
+.lab {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--red);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.lab:before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: var(--red)
+}
+
+p.lead {
+    color: var(--mute);
+    max-width: 34em;
+    margin-top: 22px
+}
+
+
+/* ------------------------------------------------------------
+   3. BUTTONS
+   .btn     neutral underline-style
+   .btn.p   primary (red)
+   .btn.g   ghost (on dark surfaces)
+   ------------------------------------------------------------ */
+.btn {
+    display: inline-block;
+    padding: 15px 28px;
+    font-weight: 500;
+    font-size: 16px;
+    border: 1.5px solid var(--ink);
+    transition: background .2s, color .2s, border-color .2s
+}
+
+.btn.p {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff
+}
+
+.btn.p:hover {
+    background: var(--ink);
+    border-color: var(--ink)
+}
+
+.btn.g {
+    border-color: rgba(255, 255, 255, .7);
+    color: #fff
+}
+
+.btn.g:hover {
+    background: #fff;
+    color: #111
+}
+
+button.btn {
+    font-family: inherit;
+    cursor: pointer
+}
+
+
+/* ------------------------------------------------------------
+   4. PHOTO CONTAINERS (.ph)
+   Used by About, Services and Projects. Each .ph holds a real
+   <img> that fills the box via object-fit: cover.
+   The gradients below are only a fallback while an image loads.
+   ------------------------------------------------------------ */
+.ph {
+    position: relative;
+    background:
+        linear-gradient(135deg, rgba(0, 0, 0, .05) 25%, transparent 25%) 0 0/48px 48px,
+        linear-gradient(160deg, #4a4741, #2a2926 60%, #3b3833);
+    overflow: hidden
+}
+
+.ph.b {
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .04) 0 2px, transparent 2px 90px), linear-gradient(160deg, #6d6759, #37342d)
+}
+
+.ph.c {
+    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 36px), linear-gradient(160deg, #59616a, #2b3036)
+}
+
+.ph i {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    font: 12px Barlow;
+    color: rgba(255, 255, 255, .55);
+    font-style: normal
+}
+
+.ph img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block
+}
+
+/* ------------------------------------------------------------
+   5. HEADER & NAVIGATION
+   ------------------------------------------------------------ */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top, 0px)
+}
+
+header .w {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px
+}
+
+header img {
+    height: 44px;
+    display: block
+}
+
+/* Header logo: the white/dark-mode variant is hidden by default.
+   themes.css swaps it in when dark mode is active. */
+header img.header-logo-dark {
+    display: none
+}
+
+nav {
+    display: flex;
+    gap: 34px;
+    font-size: 16px
+}
+
+nav a:hover {
+    color: var(--red)
+}
+
+header .btn {
+    padding: 10px 20px;
+    font-size: 15px
+}
+
+/* header right-hand actions: theme toggle + CTA */
+.h-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px
+}
+
+/* Dark/light switcher. Icon swap rules live in themes.css. */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 18px;
+    font-family: inherit;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s
+}
+
+.theme-toggle:hover {
+    border-color: var(--red);
+    color: var(--red)
+}
+
+.theme-toggle .icon-sun {
+    display: none
+}
+
+.theme-toggle .icon-moon {
+    display: inline
+}
+
+
+/* ------------------------------------------------------------
+   6. HERO
+   Background image comes from the inline style on the <section>
+   so it can be swapped per-page (or via ACF later).
+   ------------------------------------------------------------ */
+.hero {
+    color: #fff;
+    min-height: calc(100vh - 80px);
+    /* min-height: min(820px, 88vh); */
+    display: flex;
+    align-items: center;
+    padding: 80px 0 0;
+    background: linear-gradient(180deg, rgba(10, 10, 10, .15), rgba(10, 10, 10, .75)), repeating-linear-gradient(90deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 120px), linear-gradient(150deg, #5b564b, #25231f 70%)
+}
+.hero  .w{
+display: flex;
+}
+.hero_text{
+    max-width: 50em;
+}
+
+.hero h1 {
+    font-size: clamp(56px, 6vw, 100px);
+
+    font-weight: 700
+}
+
+.hero p {
+    font-size: 19px;
+    margin: 28px 0 38px;
+    max-width: 40em;
+
+    color: rgba(255, 255, 255, .85)
+}
+
+.hero .btn+.btn {
+    margin-left: 10px
+}
+
+
+/* ------------------------------------------------------------
+   7. INDUSTRIES / MARKETS
+   ------------------------------------------------------------ */
+.ind {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-top: 56px;
+    border-top: 1px solid var(--line)
+}
+
+.ind div {
+    padding: 30px 18px 8px 0;
+    border-right: 1px solid var(--line);
+    padding-left: 18px
+}
+
+.ind div:first-child {
+    padding-left: 0
+}
+
+.ind div:last-child {
+    border: 0
+}
+
+.ind svg {
+    width: 38px;
+    height: 38px;
+    stroke: var(--red);
+    fill: none;
+    stroke-width: 1.5;
+    display: block;
+    margin-bottom: 18px
+}
+
+.ind b {
+    font: 600 22px 'Barlow Condensed'
+}
+
+
+/* ------------------------------------------------------------
+   8. ABOUT
+   ------------------------------------------------------------ */
+.about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center
+}
+
+.about .ph {
+    aspect-ratio: 4/5
+}
+
+.dif {
+    margin-top: 38px;
+    border-top: 1px solid var(--line)
+}
+
+.dif p {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line)
+}
+
+.dif b {
+    font-weight: 500
+}
+
+
+/* ------------------------------------------------------------
+   9. SERVICES
+   Six cards, each with a .ph photo container.
+   ------------------------------------------------------------ */
+.svc {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 56px
+}
+
+.svc .ph {
+    aspect-ratio: 4/3;
+    transition: transform .5s
+}
+
+.svc a>div {
+    overflow: hidden
+}
+
+.svc a:hover .ph {
+    transform: scale(1.04)
+}
+
+.svc h3 {
+    font-size: 30px;
+    margin: 20px 0 8px
+}
+
+.svc p {
+    color: var(--mute);
+    font-size: 16px
+}
+
+.svc span {
+    display: inline-block;
+    margin-top: 12px;
+    font-weight: 500;
+    border-bottom: 1.5px solid var(--red)
+}
+
+
+/* ------------------------------------------------------------
+   10. FEATURED PROJECTS / GALLERY
+   A 12-column grid; each figure = one project (ACF CPT "project").
+   ------------------------------------------------------------ */
+.gal {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-top: 56px
+}
+
+.gal .ph {
+    min-height: 300px
+}
+
+.gal .a {
+    grid-column: span 7;
+    min-height: 440px
+}
+
+.gal .b2 {
+    grid-column: span 5
+}
+
+.gal .c2 {
+    grid-column: span 4
+}
+
+.gal .d {
+    grid-column: span 4
+}
+
+.gal .e {
+    grid-column: span 4
+}
+
+.gal figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 40px 18px 14px;
+    color: #fff;
+    font-size: 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .7))
+}
+/* ------------------------------------------------------------
+   11. STATS BAND
+   Dark surface in both themes (uses --dk / --dkt tokens).
+   ------------------------------------------------------------ */
+.stats {
+    background: var(--dk);
+    color: #000000;
+}
+
+.stats .g {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr)
+}
+
+.stats .g div {
+    padding: 0 28px;
+    border-left: 1px solid #3a3b40
+}
+
+.stats .g div:last-child {
+    border-right:1px solid #3a3b40;
+}
+
+.stats strong {
+    display: block;
+    font: 600 clamp(60px, 8vw, 104px)/1 'Barlow Condensed'
+}
+
+.stats span {
+    color: #444444
+}
+
+.stats em {
+    color: var(--red);
+    font-style: normal
+}
+
+
+/* ------------------------------------------------------------
+   12. TESTIMONIALS
+   ------------------------------------------------------------ */
+.q {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 56px;
+    margin-top: 56px
+}
+
+blockquote {
+    border-top: 2px solid var(--ink);
+    padding-top: 26px;
+    font-size: 21px;
+    line-height: 1.45
+}
+
+blockquote cite {
+    display: block;
+    margin-top: 22px;
+    font-size: 15px;
+    font-style: normal;
+    color: var(--mute)
+}
+
+
+/* ------------------------------------------------------------
+   13. CTA (always dark by design)
+   ------------------------------------------------------------ */
+.cta {
+    color: #fff;
+    padding: 140px 0;
+    background: linear-gradient(rgba(12, 12, 12, .68), rgba(12, 12, 12, .8)), repeating-linear-gradient(45deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 44px), linear-gradient(150deg, #565d66, #22262b)
+}
+
+.cta h2 {
+    font-size: clamp(48px, 7vw, 92px);
+    max-width: 11em
+}
+
+.cta .btn {
+    margin: 38px 12px 0 0
+}
+
+
+/* ------------------------------------------------------------
+   14. FOOTER
+   ------------------------------------------------------------ */
+footer {
+    background: var(--dk);
+    color: #a9a59d;
+    padding: 72px 0 32px;
+    font-size: 15px
+}
+
+footer .g {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    gap: 48px
+}
+
+footer img {
+    height: 44px;
+    margin-bottom: 18px
+}
+
+footer h4 {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 14px
+}
+
+footer li {
+    list-style: none;
+    margin-bottom: 8px
+}
+
+footer ul {
+    padding: 0
+}
+
+footer a:hover {
+    color: #fff
+}
+
+.legal {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid #33353a;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px
+}
+
+
+/* ------------------------------------------------------------
+   15. MODAL / CONTACT FORM
+   Dialog overlay opened by every element with
+   data-modal-open="quote" (see index.html + main.js).
+   Uses theme tokens, so it inherits light & dark automatically.
+   ------------------------------------------------------------ */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 12, .55)
+}
+
+.modal-backdrop.open {
+    display: flex;
+    animation: backdrop-in .2s ease
+}
+
+@keyframes backdrop-in {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+.modal {
+    width: min(760px, calc(100% - 32px));
+    max-height: calc(100% - 32px);
+    background: var(--bg);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, .3);
+    padding: 28px 32px;
+    overflow: auto;
+    animation: modal-in .25s ease
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(14px) scale(.98) }
+    to { opacity: 1; transform: none }
+}
+
+.modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px
+}
+
+.modal h2 {
+    font-size: clamp(26px, 3.4vw, 38px);
+    max-width: none
+}
+
+.modal-close {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1;
+    cursor: pointer
+}
+
+.modal-close:hover {
+    border-color: var(--red);
+    color: var(--red)
+}
+
+.modal form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 22px
+}
+
+.f {
+    display: flex;
+    flex-direction: column;
+    gap: 7px
+}
+
+.f.wide {
+    grid-column: 1 / -1
+}
+
+.f label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mute)
+}
+
+.f label em {
+    color: var(--red)
+}
+
+.f input,
+.f select,
+.f textarea {
+    font: 15px/1.45 Barlow, sans-serif;
+    padding: 11px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--ink)
+}
+
+.f input:focus,
+.f select:focus,
+.f textarea:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 18%, transparent)
+}
+
+.f textarea {
+    min-height: 120px;
+    resize: vertical
+}
+
+.f .note,
+.modal .actions .note {
+    font-size: 13px;
+    color: var(--mute)
+}
+
+.hp {
+    /* Honeypot — visually hidden; bots fill it in, people don't */
+    position: absolute;
+    left: -9999px;
+    opacity: 0
+}
+
+.modal .actions {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap
+}
+
+.modal-done {
+    display: none;
+    margin-top: 26px;
+    text-align: center
+}
+
+.modal-done.open {
+    display: block
+}
+
+.modal-done .ok {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 16px;
+    border: 2px solid var(--red);
+    border-radius: 50%;
+    color: var(--red);
+    font-size: 28px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.modal-done h3 {
+    font: 600 30px 'Barlow Condensed'
+}
+
+.modal-done p {
+    color: var(--mute)
+}
+
+.modal-done .actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap
+}
+
+html.modal-open {
+    overflow: hidden
+}
+
+
+/* ------------------------------------------------------------
+   16. RESPONSIVE (960px tablet, 560px phone)
+   ------------------------------------------------------------ */
+@media(max-width:960px) {
+    nav {
+        display: none
+    }
+
+    .ind {
+        grid-template-columns: repeat(2, 1fr)
+    }
+
+    .ind div {
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        padding-left: 0
+    }
+
+    .about,
+    .q,
+    footer .g {
+        grid-template-columns: 1fr;
+        gap: 40px
+    }
+
+    .svc {
+        grid-template-columns: 1fr 1fr
+    }
+
+    .stats .g {
+        grid-template-columns: 1fr 1fr
+    }
+
+    .stats .g div:nth-child(3) {
+        border-left: 0;
+        padding-left: 0
+    }
+
+    .gal .a,
+    .gal .b2,
+    .gal .c2,
+    .gal .d,
+    .gal .e {
+        grid-column: span 12;
+        min-height: 260px
+    }
+
+    .sec {
+        padding: 80px 0
+    }
+}
+
+@media(max-width:560px) {
+    .svc {
+        grid-template-columns: 1fr
+    }
+
+    .modal {
+        padding: 20px
+    }
+
+    .modal form {
+        grid-template-columns: 1fr
+    }
+
+    .hero .btn+.btn {
+        margin: 12px 0 0
+    }
+
+    header .btn {
+        display: none
+    }
+}
+
+
+/* ------------------------------------------------------------
+   17. ACCESSIBILITY — reduced motion
+   ------------------------------------------------------------ */
+@media(prefers-reduced-motion:reduce) {
+    * {
+        transition: none !important;
+        scroll-behavior: auto !important
+    }
+}

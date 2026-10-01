@@ -1,0 +1,19 @@
+# ============================================================
+# SPEC9 Flooring — Cloudflare Workers configuration
+# ------------------------------------------------------------
+# Deploy:   npx wrangler deploy
+# Preview:  npx wrangler dev
+#
+# Serves the static site from /public using Workers Static
+# Assets. A full site can be converted to a dynamic Worker /
+# Pages app later without changing the folder layout.
+# ============================================================
+
+name = "spec9-web"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+
+# Serve the static site root (index.html + assets/) through the
+# ASSETS binding. Add `binding` so a future Worker script can
+# intercept requests or add headers before falling back to assets.
+assets = { directory = "./public", binding = "ASSETS" }
